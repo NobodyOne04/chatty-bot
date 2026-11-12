@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A tiny, silly seq2seq LSTM chatbot with a short conversation memory (Keras)"
 requires-python = ">=3.11"
 dependencies = [
+    "certifi>=2026.10.23",
     "ipykernel>=7.4.0",
     "jupyterlab>=4.6.6",
     "keras>=3.15.1",
