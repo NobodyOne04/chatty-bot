@@ -221,3 +221,4 @@ __marimo__/
 
 # trained model (re-created by the notebook)
 model/
+bot.log
