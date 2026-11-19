@@ -15,8 +15,10 @@ uv run --env-file .env python telegram_bot.py           # answer in Telegram
   and answers Telegram chats; first run trains and saves `model/`, later runs load it
 - `model/`: trained weights + vocab, git-ignored, re-created by training
 - `.env`: `TELEGRAM_BOT_TOKEN`, `ALLOWED_CHAT_IDS` (comma-separated), git-ignored
+- `docs/adr/`: decision records (`.adr`), index in `docs/adr/README.md`
 
 ## Conventions
+- Read the ADR before changing a recorded decision; commit subjects carry its number (`commit-style`).
 - The model code lives only in the notebook. `telegram_bot.py` finds cells by their text
   (`model.fit(`, `model.save(`, `decoder_model =`): keep those markers when editing it.
 - Notebook cells before `decoder_model` must run headless (no `display()`, no `input()`).

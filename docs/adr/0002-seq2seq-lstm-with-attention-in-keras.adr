@@ -1,0 +1,37 @@
+# 0002. A word-level seq2seq LSTM with attention, built from scratch in Keras
+
+- Status: Proposed
+- Date: 2026-11-19
+
+The bot is a small encoder-decoder LSTM with attention, trained from scratch on a laptop CPU,
+so every part of how it works can be seen and explained. It is a learning project, silly
+on purpose, not a language model.
+
+## Technical details
+- **Tokens**: word level. `TOKEN_RE` keeps Latin and Cyrillic words, numbers and
+  punctuation; text is lower-cased and `ё` becomes `е`. Special tokens `<pad> <unk> <start>
+  <end> <u> <b>`. Vocabulary is ~600 words built from the training data; unknown words
+  become `<unk>`.
+- **Model** (`EMBED_DIM=96`, `UNITS=192`): shared `Embedding` → LSTM encoder (all states +
+  final h, c) → LSTM decoder started from the encoder's final state → scaled dot-product
+  `Attention` over the context, with its mask → `Dense(tanh)` on the concatenation →
+  `Dense(softmax)` over the vocabulary.
+- **Training**: teacher forcing, batch 64, up to `CHATTY_EPOCHS` (default 40) epochs,
+  `EarlyStopping(patience=4, restore_best_weights=True)` and `ReduceLROnPlateau(0.5, 2)`.
+  `SEED = 7` for reproducibility. About 20 minutes on a laptop CPU.
+- **Inference**: separate `encoder_model` and single-step `decoder_model` built from the
+  same trained layers; replies are generated greedily word by word (optional temperature in
+  `Chatty`). The attention scores are returned too, to draw the heatmap.
+- **Evaluation**: exact match of the whole reply on 150 fresh conversations, split by kind
+  (chat, joke, tell, ask → remembered, ask → forgotten); all 100% at the time of writing.
+- **Saved model**: `model/chatty.keras` + `model/vocab.json` (vocab, max lengths, memory),
+  git-ignored and re-created by training.
+- **Consequences**: it only knows its training vocabulary and ~40 canned replies; anything
+  outside the lists can't be answered.
+
+## Technologies and alternatives
+- Involved: Python 3.11, Keras 3 on the TensorFlow backend, NumPy, pandas, matplotlib,
+  JupyterLab; dependencies managed with uv (`pyproject.toml`, `uv.lock`).
+- Alternatives: fine-tuning or prompting a pretrained LLM (works better, teaches nothing
+  about the internals); a Transformer (more code and data for the same toy task);
+  character-level tokens (longer sequences, slower training on CPU).
