@@ -1,6 +1,6 @@
 # 0004. The notebook is the only copy of the model code
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 All model code (data, vocabulary, model, training, inference) lives in `chatty_bot.ipynb`.

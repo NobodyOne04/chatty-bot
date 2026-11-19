@@ -1,6 +1,6 @@
 # 0001. Record architecture decisions as .adr files
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 Decisions with long-term consequences for this project are recorded as numbered `.adr` files
