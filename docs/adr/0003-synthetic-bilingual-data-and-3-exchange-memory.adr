@@ -1,6 +1,6 @@
 # 0003. Synthetic English and Russian conversations; memory is the last 3 exchanges
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 The model's memory is its input: the last 3 exchanges plus the new message. The training

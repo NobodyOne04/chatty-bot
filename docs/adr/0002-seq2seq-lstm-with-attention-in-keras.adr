@@ -1,6 +1,6 @@
 # 0002. A word-level seq2seq LSTM with attention, built from scratch in Keras
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 The bot is a small encoder-decoder LSTM with attention, trained from scratch on a laptop CPU,

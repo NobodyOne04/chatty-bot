@@ -1,6 +1,6 @@
 # 0005. Telegram: long polling from the local machine, allowlisted chats only
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 `telegram_bot.py` answers Telegram chats with the trained model. It runs on the laptop with
