@@ -1,0 +1,29 @@
+# 0004. The notebook is the only copy of the model code
+
+- Status: Proposed
+- Date: 2026-11-19
+
+All model code (data, vocabulary, model, training, inference) lives in `chatty_bot.ipynb`.
+`telegram_bot.py` runs the notebook's own code cells instead of keeping a second copy.
+
+## Technical details
+- **How** (`load_notebook()` in `telegram_bot.py`): reads the notebook JSON, takes the code
+  cells in order and `exec`s them into one namespace, stopping after the cell that defines
+  `decoder_model =`. The namespace provides `context_tokens`, `generate`, `detokenize` and
+  `MEMORY`.
+- **Train once**: if `model/chatty.keras` exists, the `model.fit(` cell is replaced by
+  `load_weights`; otherwise it trains and then runs the `model.save(` cell. First start
+  ~20 minutes, later starts seconds.
+- **Markers**: cells are found by their text (`model.fit(`, `model.save(`,
+  `decoder_model =`). Edits to the notebook must keep them.
+- **Headless**: cells before `decoder_model` must run without a display or stdin (no
+  `display()`, no `input()`); `MPLBACKEND=Agg` keeps plots from opening windows.
+- **Consequences**: one place to change the model, and the notebook stays the readable
+  explanation. The cost: an implicit contract between the two files, and renaming a
+  marker or reordering cells breaks the bot at start-up (`RuntimeError` if no
+  `decoder_model` cell).
+
+## Technologies and alternatives
+- Alternatives: a `chatty/` Python package imported by the notebook (cleaner, but splits
+  the code from its explanation); `jupytext` / `nbconvert` to a script (a generated copy to
+  keep in sync); a duplicated model definition in `telegram_bot.py` (two copies drift).

@@ -1,0 +1,25 @@
+# 0001. Record architecture decisions as .adr files
+
+- Status: Proposed
+- Date: 2026-11-19
+
+Decisions with long-term consequences for this project are recorded as numbered `.adr` files
+in `docs/adr/`, so the why is in one place instead of spread over the notebook and README.
+
+## Technical details
+- **Problem**: the reasons behind the model and the Telegram bot lived in notebook markdown
+  cells, the README and `CLAUDE.md`; the Telegram PR (#1) already used `[ADR-0000.1]`
+  because there were no ADRs to point to.
+- **Files**: `docs/adr/NNNN-short-title.adr`: sequential four-digit numbers, never reused;
+  Markdown content with the `.adr` extension. `docs/adr/README.md` is the index.
+- **Format**: the `adr-manager` template (title, Status, Date, purpose, Technical details,
+  Technologies and alternatives). Statuses: Proposed, Accepted, Rejected, Deprecated,
+  Superseded (linked both ways).
+- **History**: 0002-0005 are recorded retroactively from `chatty_bot.ipynb`,
+  `telegram_bot.py`, the README and commits `1ac3c62` and `8f50416` (#1).
+- **Commits**: subjects carry the ADR they fall under (`[ADR-NNNN]`, minor `[ADR-NNNN.N]`,
+  `commit-style`); `CLAUDE.md` says to read the ADR before changing a recorded decision.
+
+## Technologies and alternatives
+- Alternatives: keep the why in the notebook and README: mixed with usage docs, no status
+  or supersession; `.md` extension: ADRs can't be told apart from other docs.

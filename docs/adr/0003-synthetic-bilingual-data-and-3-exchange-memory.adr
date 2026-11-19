@@ -1,0 +1,30 @@
+# 0003. Synthetic English and Russian conversations; memory is the last 3 exchanges
+
+- Status: Proposed
+- Date: 2026-11-19
+
+The model's memory is its input: the last 3 exchanges plus the new message. The training
+data is generated so the right answer depends on what is inside that window, which teaches
+it both to remember and to admit it has forgotten.
+
+## Technical details
+- **Input**: `context_tokens(history, message)` = `<u> user <b> bot` for each of the last
+  `MEMORY = 3` exchanges, then `<u>` + the new message. When it is longer than
+  `MAX_CONTEXT`, the oldest tokens are dropped. The target is the reply wrapped in
+  `<start> … <end>`. Anything older than the window is gone.
+- **Data**: about 10,000 conversations of 3-10 turns, half English, half Russian, from
+  fixed lists (`NAMES`, `FOODS`, pets, cities) and ~40 canned replies:
+  - chit-chat (greetings, "are you a robot?", jokes in order): one reply per phrasing,
+    so there is one right answer to learn;
+  - telling a fact (name, favourite food, pet, city);
+  - asking for it later: if the fact is inside the window, the reply uses its latest value
+    (corrections work); if not, "hmm ... i don't remember . tell me again ?".
+- **Language**: one shared vocabulary and model; the bot answers in the language of the
+  message. Added in #1, alongside English.
+- **Consequences**: memory is exactly 3 exchanges; names, foods, pets and cities must come
+  from the lists. The Telegram bot strips `!` from messages because the data never has it.
+
+## Technologies and alternatives
+- Alternatives: a real dialogue corpus (no control over what is remembered, needs far
+  more training); an explicit memory store or slot filling outside the model (the point is
+  to see attention find the fact); a longer window (longer inputs, slower training).
